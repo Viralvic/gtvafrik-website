@@ -20,7 +20,7 @@
       <aside class="article-share" aria-label="Share article">
         <span>Share</span>
         <a target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=<?php echo rawurlencode(get_permalink()); ?>">Facebook</a>
-        <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url=<?php echo rawurlencode(get_permalink()); ?>&text=<?php echo rawurlencode(get_the_title()); ?>">X</a>
+        <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?url=<?php echo rawurlencode(get_permalink()); ?>&amp;text=<?php echo rawurlencode(get_the_title()); ?>">X</a>
         <a target="_blank" rel="noopener" href="https://wa.me/?text=<?php echo rawurlencode(get_the_title() . ' ' . get_permalink()); ?>">WhatsApp</a>
       </aside>
       <div class="article-content"><?php the_content(); wp_link_pages(); ?></div>
@@ -41,7 +41,7 @@
         <?php $related_args = ['posts_per_page'=>3,'post__not_in'=>[get_the_ID()],'ignore_sticky_posts'=>true];
         if ($category) $related_args['cat'] = $category->term_id;
         $related = new WP_Query($related_args);
-        if ($related->have_posts()) : while ($related->have_posts()) : $related->the_post(); get_template_part('template-parts/post-card', null, ['variant'=>'standard']); endwhile; wp_reset_postdata(); endif; ?>
+        if ($related->have_posts()) : while ($related->have_posts()) : $related->the_post(); get_template_part('template-parts/post-card', null, ['variant'=>'standard']); endwhile; wp_reset_postdata(); else : ?><p class="empty-copy">More stories are on the way.</p><?php endif; ?>
       </div>
     </section>
   </article>

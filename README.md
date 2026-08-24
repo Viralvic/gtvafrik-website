@@ -1,44 +1,31 @@
-GTVAFRIK Website
-# GTVAFRIK — homepage
+# GTVAFRIK WordPress theme
 
-Static build. No framework, no build step. Open `index.html` in a browser and it runs.
+A lightweight, responsive custom WordPress theme for the GTVAFRIK homepage and Newsroom. It has no Elementor, jQuery, framework, package-manager, or build-step dependency.
 
-```
-index.html
-styles.css
-script.js
-assets/
-  gtvafrik-editorial.jpg   ← placeholder, swap this out
-```
+## Included
 
-## What changed from the Replit export
+- Responsive homepage with approved services, proof-of-work links, brand list, WhatsApp CTA, and dynamic Newsroom cards
+- Newsroom/posts archive with featured-story treatment, search, and pagination
+- Category and search-result archives
+- Single-story template with reading time, sharing links, latest stories, and category-related stories
+- WordPress custom-logo and navigation-menu support
+- Accessible mobile navigation, skip link, focus behavior, responsive images, and reduced-motion handling
 
-- Compiled Tailwind (~124KB inlined) replaced with hand-written CSS on custom properties
-- All Vite dev-server, hot-reload and Replit editor scripts removed
-- Every `data-replit-metadata` and `data-component-name` attribute stripped
-- Absolute `replit.dev` links rewritten to local hashes (`#services`, `#work`, `#contact`)
-- The **Advocacy** nav link previously pointed at `#advocacy`, which did not exist. It now targets the third services row.
-- Lucide SVG icons replaced with CSS-drawn arrows, chevrons and the play glyph, so there is no icon library to load
-- Client ticker duplicated in JS instead of by hand in markup
-- Added: skip link, keyboard focus rings, `prefers-reduced-motion` handling, working mobile menu, form validation
+## Install
 
-## Before this goes live
+1. Place this folder in `wp-content/themes/gtvafrik`.
+2. Activate **GTVAFRIK** under Appearance → Themes.
+3. Set a static page as the homepage and a separate page as the posts page under Settings → Reading.
+4. Upload the supplied GTVAFRIK logo under Appearance → Customize → Site Identity.
+5. Assign a menu to the **Primary Menu** location if custom navigation is required. The theme includes a complete fallback menu.
+6. Ensure posts have featured images, excerpts, and categories for the strongest editorial presentation.
 
-**1. The hero image.** `assets/gtvafrik-editorial.jpg` is a generated placeholder. Drop your real photo in at the same path, or change the `src` in `index.html`. Portrait crop, roughly 800×1000 or larger.
+## Content and assets
 
-**2. The client logos and case studies.** The grid currently names MTN, Dangote, Safaricom, PwC Africa, Absa, Equity Bank, the African Union Commission, the Mo Ibrahim Foundation and others. The case studies came from the mockup as illustrative examples. Replace both with real clients and real work, or remove the sections. Naming organisations as clients when they are not is a legal exposure, not a placeholder.
+The WhatsApp CTA points to `+234 818 805 9300`. The homepage portfolio links and brand names reflect the approved feedback supplied for this project. The bundled editorial image is used as the homepage hero visual until a final production still or showreel poster is supplied.
 
-**3. The form.** `script.js` fakes a success response. Point it at a real endpoint before launch.
+The retained `index.html`, `styles.css`, and `script.js` files are the original static reference build; WordPress renders from the PHP templates and `assets/` files.
 
-## Colour reference
+## Performance notes
 
-| Token | Hex | Used for |
-|---|---|---|
-| `--navy-900` | `#071936` | page base |
-| `--cyan` | `#12d9ed` | primary accent, links, CTAs |
-| `--yellow` | `#f2d248` | partners band, hero stat |
-| `--coral` | `#ff5e48` | service tags, case chip |
-| `--violet` | `#a594e8` | case chip |
-| `--cream` | `#f3f0e9` | body text |
-
-Type: Space Grotesk (display), Plus Jakarta Sans (body), DM Mono (labels and metadata).
+Theme CSS and JavaScript are cache-busted from file modification times. JavaScript is dependency-free and loaded in the footer. No page-builder frontend runtime is required. Google Fonts are the only third-party frontend request; they can be self-hosted later if desired.

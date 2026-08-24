@@ -15,6 +15,7 @@
     'post_type' => 'post',
     'posts_per_page' => 1,
     'ignore_sticky_posts' => false,
+    'no_found_rows' => true,
   ]);
   $featured_ids = [];
   if ($featured->have_posts()) : ?>
