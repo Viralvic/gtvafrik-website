@@ -4,7 +4,7 @@ A lightweight, responsive custom WordPress theme for the GTVAFRIK homepage and N
 
 ## Included
 
-- Responsive homepage with approved services, proof-of-work links, brand list, WhatsApp CTA, and dynamic Newsroom cards
+- Responsive homepage with modal video reels, service hover states, portfolio and editorial carousels, a six-column client wall, contact form, and dynamic Newsroom cards
 - Newsroom/posts archive with featured-story treatment, search, and pagination
 - Category and search-result archives
 - Single-story template with reading time, sharing links, latest stories, and category-related stories
@@ -22,10 +22,11 @@ A lightweight, responsive custom WordPress theme for the GTVAFRIK homepage and N
 
 ## Content and assets
 
-The WhatsApp CTA points to `+234 818 805 9300`. The homepage portfolio links and brand names reflect the approved feedback supplied for this project. The bundled editorial image is used as the homepage hero visual until a final production still or showreel poster is supplied.
+The contact-section WhatsApp CTA points to `+234 818 805 9300`. Homepage media is resolved from the WordPress Media Library by filename, so the uploaded hero reel, proof-of-work videos, carousel artwork, and client logos remain replaceable through WordPress.
 
 The retained `index.html`, `styles.css`, and `script.js` files are the original static reference build; WordPress renders from the PHP templates and `assets/` files.
 
 ## Performance notes
 
 Theme CSS and JavaScript are cache-busted from file modification times. JavaScript is dependency-free and loaded in the footer. No page-builder frontend runtime is required. Google Fonts are the only third-party frontend request; they can be self-hosted later if desired.
+
