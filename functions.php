@@ -64,3 +64,17 @@ function gtvafrik_posts_page_url() {
     $page_id = (int) get_option('page_for_posts');
     return $page_id ? get_permalink($page_id) : home_url('/newsroom/');
 }
+
+function gtvafrik_media_url($filename) {
+    global $wpdb;
+    static $cache = [];
+    if (isset($cache[$filename])) return $cache[$filename];
+    $like = '%/' . $wpdb->esc_like($filename);
+    $attachment_id = $wpdb->get_var($wpdb->prepare(
+        "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s ORDER BY post_id DESC LIMIT 1",
+        $like
+    ));
+    $cache[$filename] = $attachment_id ? wp_get_attachment_url((int) $attachment_id) : '';
+    return $cache[$filename];
+}
+
