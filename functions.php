@@ -89,7 +89,7 @@ function gtvafrik_handle_contact() {
     if (!$name || !is_email($email) || !$message) wp_die('Please complete all required fields.');
     $subject = sprintf('Homepage enquiry from %s', $name);
     $body = "Name: {$name}\nEmail: {$email}\nProject: {$project}\n\n{$message}";
-    wp_mail(get_option('admin_email'), $subject, $body, ['Reply-To: ' . $name . ' <' . $email . '>']);
+    wp_mail('info@gtvafrik.com', $subject, $body, ['Reply-To: ' . $name . ' <' . $email . '>']);
     wp_safe_redirect(add_query_arg('contact', 'sent', home_url('/#contact')));
     exit;
 }
