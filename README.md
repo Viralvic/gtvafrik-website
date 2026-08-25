@@ -1,3 +1,4 @@
+GTVAFRIK Website
 # GTVAFRIK — homepage
 
 Static build. No framework, no build step. Open `index.html` in a browser and it runs.
