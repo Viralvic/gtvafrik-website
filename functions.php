@@ -78,3 +78,21 @@ function gtvafrik_media_url($filename) {
     return $cache[$filename];
 }
 
+function gtvafrik_handle_contact() {
+    if (!isset($_POST['gtvafrik_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['gtvafrik_nonce'])), 'gtvafrik_contact')) {
+        wp_die('The form session expired. Please return and try again.');
+    }
+    $name = sanitize_text_field(wp_unslash($_POST['name'] ?? ''));
+    $email = sanitize_email(wp_unslash($_POST['email'] ?? ''));
+    $project = sanitize_text_field(wp_unslash($_POST['project'] ?? ''));
+    $message = sanitize_textarea_field(wp_unslash($_POST['message'] ?? ''));
+    if (!$name || !is_email($email) || !$message) wp_die('Please complete all required fields.');
+    $subject = sprintf('Homepage enquiry from %s', $name);
+    $body = "Name: {$name}\nEmail: {$email}\nProject: {$project}\n\n{$message}";
+    wp_mail(get_option('admin_email'), $subject, $body, ['Reply-To: ' . $name . ' <' . $email . '>']);
+    wp_safe_redirect(add_query_arg('contact', 'sent', home_url('/#contact')));
+    exit;
+}
+add_action('admin_post_gtvafrik_contact', 'gtvafrik_handle_contact');
+add_action('admin_post_nopriv_gtvafrik_contact', 'gtvafrik_handle_contact');
+
