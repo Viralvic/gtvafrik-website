@@ -14,7 +14,8 @@
     <div class="hero__visual">
       <div class="hero__ring" aria-hidden="true"></div>
       <figure class="hero__frame">
-        <img src="<?php echo esc_url(get_template_directory_uri() . '/gtvafrik-editorial.jpg'); ?>" alt="GTVAFRIK editorial production" width="1200" height="800" fetchpriority="high">
+        <?php $hero_reel = gtvafrik_media_url('GTVAFRIK-Hero-Reel.mp4'); ?>
+        <?php if ($hero_reel) : ?><video autoplay muted loop playsinline preload="metadata" aria-label="GTVAFRIK production reel"><source src="<?php echo esc_url($hero_reel); ?>" type="video/mp4"></video><?php endif; ?>
         <span class="hero__wash" aria-hidden="true"></span>
       </figure>
       <div class="hero__visual-card" aria-hidden="true"><span>54</span><small>countries<br>in frame</small></div>
@@ -32,6 +33,14 @@
       <article><span>02</span><div><h3>Give culture a bigger stage.</h3><ul class="tag-list tag-list--coral"><li>Original shows</li><li>Talent partnerships</li><li>Live production</li></ul></div><p>From original formats to live moments, we build programming that puts African voices in the frame.</p></article>
       <article id="advocacy"><span>03</span><div><h3>Move people from aware to active.</h3><ul class="tag-list tag-list--yellow"><li>Impact narratives</li><li>Public engagement</li><li>Movement design</li></ul></div><p>Advocacy with a pulse: human campaigns that make complex issues clear, urgent and actionable.</p></article>
     </div>
+    <div class="featured-social">
+      <div class="section-heading"><div><p class="eyebrow">/ Featured post</p><h2>Inside what we do.</h2></div><a class="text-link" href="https://www.instagram.com/p/DU74uHvCG9Y/" target="_blank" rel="noopener">View original post →</a></div>
+      <div class="what-carousel" aria-label="What We Do featured carousel">
+        <?php for ($slide = 1; $slide <= 8; $slide++) : $slide_url = gtvafrik_media_url($slide . '.jpg'); if (!$slide_url) continue; ?>
+          <figure><img src="<?php echo esc_url($slide_url); ?>" alt="What We Do carousel slide <?php echo esc_attr($slide); ?> of 8" loading="lazy"></figure>
+        <?php endfor; ?>
+      </div>
+    </div>
   </section>
 
   <section class="programming" id="programming">
@@ -41,16 +50,19 @@
   <section class="section shell" id="work">
     <div class="section-heading"><div><p class="eyebrow">/ Proof of work</p><h2>Proof in the work.</h2></div><p>Watch three pieces from GTVAFRIK's current portfolio.</p></div>
     <div class="work-grid">
-      <a class="work-card work-card--coral" href="https://www.instagram.com/reel/DWjE5zIiOME/" target="_blank" rel="noopener"><span>Case / 01</span><strong>Campaign storytelling</strong><small>Watch on Instagram <b aria-hidden="true">↗</b></small></a>
-      <a class="work-card work-card--cyan" href="https://www.instagram.com/reel/DXOhSRKCFaC/" target="_blank" rel="noopener"><span>Case / 02</span><strong>Culture in motion</strong><small>Watch on Instagram <b aria-hidden="true">↗</b></small></a>
-      <a class="work-card work-card--yellow" href="https://youtu.be/dK0AzE0KYjI" target="_blank" rel="noopener"><span>Case / 03</span><strong>Stories built to travel</strong><small>Watch on YouTube <b aria-hidden="true">↗</b></small></a>
+      <article class="work-card work-card--wide work-card--coral"><span>Case / 01</span><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/dK0AzE0KYjI" title="Citizen Autopsy" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div><strong>Citizen Autopsy</strong></article>
+      <?php foreach ([['Mens-Table.mp4', "Men's Table", 'cyan'], ['The-Rock-Zanzibar.mp4', 'The Rock Restaurant Zanzibar', 'yellow']] as $work) : $work_url = gtvafrik_media_url($work[0]); ?>
+        <article class="work-card work-card--reel work-card--<?php echo esc_attr($work[2]); ?>"><span>Case / <?php echo $work[1] === "Men's Table" ? '02' : '03'; ?></span><?php if ($work_url) : ?><video controls playsinline preload="metadata"><source src="<?php echo esc_url($work_url); ?>" type="video/mp4"></video><?php endif; ?><strong><?php echo esc_html($work[1]); ?></strong></article>
+      <?php endforeach; ?>
     </div>
   </section>
 
   <section class="section shell" id="clients">
     <div class="section-heading"><div><p class="eyebrow">/ Brands we've worked with</p><h2>Across sectors.<br><span class="accent">Across the continent.</span></h2></div><p>Businesses, institutions and public-interest organisations that trusted GTVAFRIK to carry the signal.</p></div>
-    <?php $brands = ['INEC','PDP','NOA','APC','SLOT Nigeria','International Energy Agency','NCDC','African Achievers Award','DreamSpring Microfinance','Rural Electrification Agency','SSANU','NEXCO Elevators','Ministry of Petroleum Resources and Gas','WOTCLEF','HyperCITY']; ?>
-    <div class="brand-grid"><?php foreach ($brands as $brand) : ?><div class="brand-tile"><?php echo esc_html($brand); ?></div><?php endforeach; ?></div>
+    <?php $brands = [
+      ['AAA-African-Achievers-Award.png','African Achievers Award'], ['APC-All-Progressives-Congress.png','All Progressives Congress'], ['Colective-Initiative.png','Collective Initiative'], ['Dream-Spring-Microfinance.png','DreamSpring Microfinance'], ['GSP-Hybrid-Power-Solution.svg','GSP Hybrid Power Solution'], ['HyperCITY.jpg','HyperCITY'], ['IEA-International-Energy-Agency-France.webp','International Energy Agency'], ['INEC-Independent-National-Electoral-Commission.png','INEC'], ['Kids-Windows-School.png','Kids Windows School'], ['Ministry-of-Petroleum-Resources-and-Gas-NPR.svg','Ministry of Petroleum Resources and Gas'], ['NCDC-North-Central-Development-Commission.jpg','North Central Development Commission'], ['NEXCO-Elevators.jpg','NEXCO Elevators'], ['NOA-National-Orientation-Agency.svg','National Orientation Agency'], ['PDP-Peoples-Democratic-Party.png','Peoples Democratic Party'], ['REA-Rural-Electrification-Agency.png','Rural Electrification Agency'], ['SLOT-Nigeria.webp','SLOT Nigeria'], ['SSANU-Senior-Staff-Association-of-Nigeria-Universities.png','SSANU'], ['WOTCLEF-Women-Trafficking-and-Child-Labour-Eradication-Foundation.png','WOTCLEF']
+    ]; ?>
+    <div class="brand-grid"><?php foreach ($brands as $brand) : $logo = gtvafrik_media_url($brand[0]); ?><div class="brand-tile"><?php if ($logo) : ?><img src="<?php echo esc_url($logo); ?>" alt="<?php echo esc_attr($brand[1]); ?> logo" loading="lazy"><?php else : echo esc_html($brand[1]); endif; ?></div><?php endforeach; ?><div class="brand-tile brand-tile--text"><strong>TMG</strong><small>Tinubu Mega Group</small></div></div>
   </section>
 
   <section class="section newsroom-preview shell" id="newsroom">
@@ -67,3 +79,4 @@
   </section>
 </main>
 <?php get_footer(); ?>
+
