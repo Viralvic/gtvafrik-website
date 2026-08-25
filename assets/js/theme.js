@@ -1,7 +1,6 @@
 (function(){
   'use strict';
-  var toggle=document.querySelector('.menu-toggle'),menu=document.getElementById('mobile-menu');
-  if(toggle&&menu){toggle.addEventListener('click',function(){var open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));menu.hidden=open;});}
+  document.querySelectorAll('.site-header--homepage .menu-toggle').forEach(function(toggle){var menu=toggle.closest('.site-header').querySelector('.mobile-menu');if(menu){toggle.addEventListener('click',function(){var open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));menu.hidden=open;});menu.querySelectorAll('a').forEach(function(link){link.addEventListener('click',function(){toggle.setAttribute('aria-expanded','false');menu.hidden=true;});});}});
   document.querySelectorAll('[data-carousel]').forEach(function(carousel){
     var track=carousel.querySelector('.carousel__track'),prev=carousel.querySelector('[data-prev]'),next=carousel.querySelector('[data-next]');
     function move(dir){track.scrollBy({left:dir*track.clientWidth*.82,behavior:'smooth'});}
