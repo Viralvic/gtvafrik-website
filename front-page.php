@@ -1,6 +1,6 @@
 <?php get_header(); ?>
 <?php
-$hero_reel = gtvafrik_media_url('GTVAFRIK-Hero-Reel.mp4');
+$hero_reel = 'https://gtvafrik.com/wp-content/uploads/2026/09/HEADER-SECTION.mov';
 $proof_items = [
   ['01', 'Citizen Autopsy', 'DOCUMENTARY · PUBLIC INTEREST', 'youtube', 'https://www.youtube-nocookie.com/embed/dK0AzE0KYjI?autoplay=1', 'coral'],
   ['02', "Men's Table", 'ORIGINAL PROGRAMMING · CULTURE', 'video', gtvafrik_media_url('Mens-Table.mp4'), 'cyan'],
@@ -32,9 +32,8 @@ $proof_items = [
       <article class="service-card service-card--coral"><span>02</span><div><h3>Give culture a bigger stage.</h3><ul class="tag-list tag-list--coral"><li>Original shows</li><li>Talent partnerships</li><li>Live production</li></ul></div><p>From original formats to live moments, we build programming that puts African voices in the frame.</p></article>
       <article class="service-card service-card--yellow" id="advocacy"><span>03</span><div><h3>Move people from aware to active.</h3><ul class="tag-list tag-list--yellow"><li>Impact narratives</li><li>Public engagement</li><li>Movement design</li></ul></div><p>Advocacy with a pulse: human campaigns that make complex issues clear, urgent and actionable.</p></article>
     </div>
-    <div class="carousel carousel--what" data-carousel><div class="carousel__track what-carousel">
-      <?php for ($slide = 1; $slide <= 8; $slide++) : $slide_url = gtvafrik_media_url($slide . '.jpg'); if (!$slide_url) continue; ?><a href="https://www.instagram.com/p/DU74uHvCG9Y/" target="_blank" rel="noopener"><img src="<?php echo esc_url($slide_url); ?>" alt="What We Do carousel slide <?php echo esc_attr($slide); ?> of 8" loading="lazy"></a><?php endfor; ?>
-    </div><div class="carousel__controls carousel__controls--what"><button type="button" data-prev aria-label="Previous carousel images">‹</button><div class="carousel__dots" aria-hidden="true"><span class="is-active"></span><span></span><span></span></div><button type="button" data-next aria-label="Next carousel images">›</button></div></div>
+    <?php $what_cards = [['1.jpg','We Are Active',home_url('/we-are-active/')],['2.jpg','Who We Are',home_url('/who-we-are/')],['3.jpg','Our Pillars','modal']]; ?>
+    <div class="carousel carousel--what" data-carousel><div class="carousel__track what-carousel"><?php foreach ($what_cards as $card) : $image = gtvafrik_media_url($card[0]); if (!$image) continue; ?><?php if ('modal' === $card[2]) : ?><button class="what-carousel__card" type="button" data-modal="pillars-modal"><img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($card[1]); ?>" loading="lazy"></button><?php else : ?><a class="what-carousel__card" href="<?php echo esc_url($card[2]); ?>"><img src="<?php echo esc_url($image); ?>" alt="<?php echo esc_attr($card[1]); ?>" loading="lazy"></a><?php endif; ?><?php endforeach; ?></div><div class="carousel__controls carousel__controls--what"><button type="button" data-prev aria-label="Previous carousel image">‹</button><div class="carousel__dots" aria-hidden="true"><span class="is-active"></span><span></span><span></span></div><button type="button" data-next aria-label="Next carousel image">›</button></div></div>
   </section>
 
   <section class="section programming" id="programming"><div class="shell programming__inner">
@@ -66,6 +65,7 @@ $proof_items = [
   </div></section>
 </main>
 <dialog class="media-modal" id="hero-reel-modal"><button class="media-modal__close" type="button" aria-label="Close video">×</button><div class="media-modal__stage media-modal__stage--vertical"><?php if ($hero_reel) : ?><video controls playsinline preload="auto" src="<?php echo esc_url($hero_reel); ?>"><a href="<?php echo esc_url($hero_reel); ?>">Open the hero reel</a></video><?php endif; ?></div></dialog>
+<dialog class="media-modal pillars-modal" id="pillars-modal"><button class="media-modal__close" type="button" aria-label="Close pillars">×</button><div class="pillars-modal__header"><p class="eyebrow">/ Our pillars</p><h2>Explore the MAMMA framework.</h2></div><?php $pillar_cards = [['4.jpg','Media',home_url('/our-pillars/media/')],['5.jpg','Advertising',home_url('/our-pillars/advertising/')],['6.jpg','Marketing',home_url('/our-pillars/marketing/')],['7.jpg','Mobility',home_url('/our-pillars/mobility/')],['8.jpg','Advocacy',home_url('/our-pillars/advocacy/')]]; ?><div class="carousel pillars-carousel" data-carousel><div class="carousel__track pillars-carousel__track"><?php foreach ($pillar_cards as $pillar) : $pillar_image = gtvafrik_media_url($pillar[0]); if (!$pillar_image) continue; ?><a href="<?php echo esc_url($pillar[2]); ?>"><img src="<?php echo esc_url($pillar_image); ?>" alt="<?php echo esc_attr($pillar[1]); ?>" loading="lazy"><strong><?php echo esc_html($pillar[1]); ?></strong></a><?php endforeach; ?></div><div class="carousel__controls"><button type="button" data-prev aria-label="Previous pillar">‹</button><div class="carousel__dots" aria-hidden="true"><span class="is-active"></span><span></span><span></span><span></span><span></span></div><button type="button" data-next aria-label="Next pillar">›</button></div></div></dialog>
 <dialog class="media-modal" id="proof-modal"><button class="media-modal__close" type="button" aria-label="Close video">×</button><h2></h2><div class="media-modal__stage"></div></dialog>
 <?php get_template_part('template-parts/home-footer'); ?>
 <?php get_footer(); ?>
