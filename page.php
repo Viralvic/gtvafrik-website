@@ -58,7 +58,21 @@ $legal_pages = [
   ],
 ];
 
-if (isset($legal_pages[$slug])) :
+if ('book-a-call' === $slug) : ?>
+  <main id="main" class="action-page">
+    <div class="shell action-page__grid">
+      <div class="action-page__copy"><p class="eyebrow">/ Booking desk</p><h1>Let’s make the<br><span class="accent">next move.</span></h1><p>Tell us what you’re building, where you need momentum and when you would like to talk. Our team will respond to arrange a suitable time.</p><ul class="action-page__details"><li><strong>Email</strong><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></li><li><strong>Phone</strong><a href="tel:+2348188059300">+234 818 805 9300</a></li></ul></div>
+      <?php gtvafrik_contact_form('Book a Call'); ?>
+    </div>
+  </main>
+<?php elseif ('contact-us' === $slug) : ?>
+  <main id="main" class="action-page">
+    <div class="shell action-page__grid">
+      <div class="action-page__copy"><p class="eyebrow">/ Contact us</p><h1>Start a<br><span class="accent">conversation.</span></h1><p>For campaigns, production, partnerships, newsroom enquiries or general questions, reach us directly or send the form.</p><ul class="action-page__details"><li><strong>Email</strong><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></li><li><strong>Call / WhatsApp</strong><a href="tel:+2348188059300">+234 818 805 9300</a></li><li><strong>Office</strong><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address></li></ul><a class="button button--ghost button--pill" href="https://wa.me/2348188059300" target="_blank" rel="noopener">Open WhatsApp <span aria-hidden="true">↗</span></a></div>
+      <?php gtvafrik_contact_form('Contact GTVAFRIK'); ?>
+    </div>
+  </main>
+<?php elseif (isset($legal_pages[$slug])) :
   $page = $legal_pages[$slug]; ?>
   <main id="main" class="legal-page">
     <div class="shell legal-page__layout">
@@ -72,7 +86,6 @@ if (isset($legal_pages[$slug])) :
         <?php foreach ($page['sections'] as $section) : ?>
           <section><h2><?php echo esc_html($section[0]); ?></h2><?php echo wp_kses_post($section[1]); ?></section>
         <?php endforeach; ?>
-        <p class="legal-page__notice">This website policy is a practical baseline and should be reviewed by qualified counsel against GTVAFRIK’s registered company details, actual service providers and current operating practices.</p>
       </article>
     </div>
   </main>
