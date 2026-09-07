@@ -96,3 +96,13 @@ function gtvafrik_handle_contact() {
 add_action('admin_post_gtvafrik_contact', 'gtvafrik_handle_contact');
 add_action('admin_post_nopriv_gtvafrik_contact', 'gtvafrik_handle_contact');
 
+
+
+/**
+ * Render the GTVAFRIK header consistently, including pages previously controlled
+ * by an Elementor Theme Builder header.
+ */
+function gtvafrik_render_global_header() {
+    get_template_part('template-parts/home-header');
+}
+add_action('wp_body_open', 'gtvafrik_render_global_header', 20);
