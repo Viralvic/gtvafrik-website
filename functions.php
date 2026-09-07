@@ -117,6 +117,8 @@ function gtvafrik_ensure_legal_pages() {
         'cookies-policy' => 'Cookies Policy',
         'privacy-policy' => 'Privacy Policy',
         'terms-of-use'   => 'Terms of Use',
+        'book-a-call'   => 'Book a Call',
+        'contact-us'    => 'Contact Us',
     ];
     foreach ($pages as $slug => $title) {
         if (!get_page_by_path($slug, OBJECT, 'page')) {
@@ -131,3 +133,19 @@ function gtvafrik_ensure_legal_pages() {
     }
 }
 add_action('init', 'gtvafrik_ensure_legal_pages');
+
+
+/**
+ * Shared enquiry form used by the booking and contact pages.
+ */
+function gtvafrik_contact_form($heading = 'Booking desk') { ?>
+    <form class="booking-form action-page__form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post">
+      <input type="hidden" name="action" value="gtvafrik_contact"><?php wp_nonce_field('gtvafrik_contact','gtvafrik_nonce'); ?>
+      <p class="eyebrow"><?php echo esc_html($heading); ?></p>
+      <label>Your name<input name="name" required autocomplete="name" placeholder="Tell us what to call you"></label>
+      <label>Email address<input name="email" type="email" required autocomplete="email" placeholder="you@company.com"></label>
+      <label>Project type<select name="project"><option>Brand & Campaign</option><option>Programming & Production</option><option>Advocacy & Impact</option><option>Media Partnership</option><option>General enquiry</option><option>Other</option></select></label>
+      <label>A little about the brief<textarea name="message" required rows="5" placeholder="What are we making matter?"></textarea></label>
+      <button class="button button--pill" type="submit">Send the brief <span aria-hidden="true">↗</span></button>
+    </form>
+<?php }
