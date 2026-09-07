@@ -106,3 +106,28 @@ function gtvafrik_render_global_header() {
     get_template_part('template-parts/home-header');
 }
 add_action('wp_body_open', 'gtvafrik_render_global_header', 20);
+
+
+/**
+ * Ensure the four public legal pages exist after theme updates.
+ */
+function gtvafrik_ensure_legal_pages() {
+    $pages = [
+        'disclaimer'     => 'Disclaimer',
+        'cookies-policy' => 'Cookies Policy',
+        'privacy-policy' => 'Privacy Policy',
+        'terms-of-use'   => 'Terms of Use',
+    ];
+    foreach ($pages as $slug => $title) {
+        if (!get_page_by_path($slug, OBJECT, 'page')) {
+            wp_insert_post([
+                'post_title'   => $title,
+                'post_name'    => $slug,
+                'post_type'    => 'page',
+                'post_status'  => 'publish',
+                'post_content' => '',
+            ]);
+        }
+    }
+}
+add_action('init', 'gtvafrik_ensure_legal_pages');
