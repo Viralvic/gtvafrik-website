@@ -69,7 +69,7 @@ if ('book-a-call' === $slug) : ?>
   <main id="main" class="action-page">
     <div class="shell action-page__grid">
       <div class="action-page__copy"><p class="eyebrow">/ Contact us</p><h1>Start a<br><span class="accent">conversation.</span></h1><p>For campaigns, production, partnerships, newsroom enquiries or general questions, reach us directly or send the form.</p><ul class="action-page__details"><li><strong>Email</strong><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></li><li><strong>Call / WhatsApp</strong><a href="tel:+2348188059300">+234 818 805 9300</a></li><li><strong>Office</strong><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address></li></ul><a class="button button--ghost button--pill" href="https://wa.me/2348188059300" target="_blank" rel="noopener">Open WhatsApp <span aria-hidden="true">↗</span></a></div>
-      <?php gtvafrik_contact_form('Contact GTVAFRIK'); ?>
+      <?php gtvafrik_simple_contact_form(); ?>
     </div>
   </main>
 <?php elseif (isset($legal_pages[$slug])) :
