@@ -19,7 +19,7 @@ $proof_items = [
       </div>
     </div>
     <div class="hero__visual">
-      <figure class="hero__frame"><?php if ($hero_reel) : ?><video autoplay muted loop playsinline preload="metadata" aria-label="GTVAFRIK production reel"><source src="<?php echo esc_url($hero_reel); ?>" type="video/mp4"></video><?php endif; ?><span class="hero__wash" aria-hidden="true"></span></figure>
+      <figure class="hero__frame"><?php if ($hero_reel) : ?><video autoplay muted loop playsinline preload="metadata" aria-label="GTVAFRIK production reel"><source src="<?php echo esc_url($hero_reel); ?>"></video><?php endif; ?><span class="hero__wash" aria-hidden="true"></span></figure>
       <div class="hero__visual-card" aria-hidden="true"><span>54</span><small>countries<br>in frame</small></div>
       <p class="hero__rotated" aria-hidden="true">The continent in motion</p>
     </div>
