@@ -247,3 +247,25 @@ body>.site-header:not(.site-header--homepage){display:none!important}
 @keyframes logo-roll{to{transform:translateX(-50%)}}
 @media(max-width:640px){.brand-logo-marquee .brand-tile{width:145px;min-height:92px}.brand-logo-track{animation-duration:30s}.home-brand__logo::after{display:none}}
 @media(prefers-reduced-motion:reduce){.home-brand__logo,.home-brand__logo::after,.brand-logo-track{animation:none}.proof-card__preview{transition:none}}
+
+
+/* Legal pages and client-logo corrections — v0.9 */
+.brand-logo-marquee .brand-tile img,
+.brand-logo-marquee .brand-tile:hover img{filter:none!important;opacity:1!important;mix-blend-mode:normal}
+.legal-page{background:#f7f9fc;color:var(--navy);padding:clamp(64px,8vw,120px) 0}
+.legal-page__layout{display:grid;grid-template-columns:minmax(220px,.34fr) minmax(0,1fr);gap:clamp(40px,7vw,110px);align-items:start}
+.legal-page__aside{position:sticky;top:140px}
+.legal-page__aside h1{font:700 clamp(2.6rem,5vw,5.4rem)/.94 var(--display);letter-spacing:-.055em;margin:18px 0}
+.legal-page__updated{font:500 .7rem var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#5c718c}
+.legal-page__intro{font-size:1.2rem;color:#3e526b;margin:0 0 48px}
+.legal-page__content{max-width:820px}
+.legal-page__content section{padding:0 0 36px;margin:0 0 36px;border-bottom:1px solid #d9e2ec}
+.legal-page__content section:last-child{border-bottom:0}
+.legal-page__content h2{font:700 clamp(1.4rem,2.4vw,2rem)/1.15 var(--display);letter-spacing:-.03em;margin:0 0 14px}
+.legal-page__content p,.legal-page__content li{color:#425773}
+.legal-page__content ul{padding-left:1.25rem}
+.legal-page__content a{color:#087ab8;text-decoration:underline;text-underline-offset:3px}
+.legal-page__notice{margin-top:30px;padding:20px;border:1px solid #c8d6e5;background:#fff;color:#526276;font-size:.88rem}
+.site-footer__meta{flex-wrap:wrap}
+.site-footer__legal-links{display:flex;gap:14px;flex-wrap:wrap}
+@media(max-width:760px){.legal-page__layout{grid-template-columns:1fr}.legal-page__aside{position:static}.legal-page__intro{font-size:1.04rem}.legal-page__content section{padding-bottom:28px;margin-bottom:28px}}
