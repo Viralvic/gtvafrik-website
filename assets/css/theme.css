@@ -298,3 +298,25 @@ body>.site-header:not(.site-header--homepage){display:none!important}
 .action-page__form{position:sticky;top:145px}
 @media(max-width:900px){.what-intro-grid,.action-page__grid{grid-template-columns:1fr}.what-intro-grid__video{order:2}.trust__grid{grid-template-columns:1fr 1fr}.trust__art{grid-column:1/-1}.action-page__form{position:static}}
 @media(max-width:640px){.brand-logo-marquee .brand-tile{width:130px;min-height:74px;padding:8px}.brand-logo-marquee .brand-tile img,.brand-logo-marquee .brand-tile:hover img{height:40px;max-width:108px}.what-intro-grid__copy h2{font-size:3.2rem}.trust__grid{grid-template-columns:1fr}.trust__art{grid-column:auto}.trust__art img{width:230px}.action-page__copy h1{font-size:3.8rem}.action-page__details li{grid-template-columns:1fr;gap:5px}}
+
+
+/* Three-card What We Do carousel and pillar modal — v0.11 */
+.what-carousel{grid-auto-columns:calc((100% - 52px)/3)}
+.what-carousel__card{position:relative;display:block;overflow:hidden;border:1px solid var(--line);background:#071936;padding:0;cursor:pointer;text-align:inherit}
+button.what-carousel__card{font:inherit;color:inherit;width:auto}
+.what-carousel__card::after{content:"";position:absolute;inset:0;background:rgba(2,12,30,.26);transition:opacity .3s ease;pointer-events:none}
+.what-carousel__card:hover::after,.what-carousel__card:focus-visible::after{opacity:0}
+.what-carousel__card img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .35s ease}
+.what-carousel__card:hover img,.what-carousel__card:focus-visible img{transform:scale(1.025);filter:none}
+.pillars-modal{width:min(1480px,calc(100% - 32px));background:var(--navy);color:var(--cream);border:1px solid var(--line);padding:clamp(28px,4vw,64px)}
+.pillars-modal__header{padding-right:60px;margin-bottom:30px}
+.pillars-modal__header h2{font:700 clamp(2rem,4vw,4.4rem)/.95 var(--display);letter-spacing:-.05em;margin:10px 0}
+.pillars-carousel__track{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 64px)/3);gap:32px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.pillars-carousel__track::-webkit-scrollbar{display:none}
+.pillars-carousel__track a{position:relative;scroll-snap-align:start;aspect-ratio:4/5;overflow:hidden;border:1px solid var(--line);background:#0c2444}
+.pillars-carousel__track img{width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.pillars-carousel__track a:hover img{transform:scale(1.025)}
+.pillars-carousel__track strong{position:absolute;left:20px;right:20px;bottom:18px;padding:12px;background:rgba(7,25,54,.88);font:700 1.15rem var(--display)}
+.contact-details-form label{margin-bottom:24px}
+@media(max-width:900px){.what-carousel{grid-auto-columns:70%}.pillars-carousel__track{grid-auto-columns:64%}}
+@media(max-width:640px){.what-carousel{grid-auto-columns:88%}.pillars-modal{padding:22px}.pillars-carousel__track{grid-auto-columns:86%;gap:16px}}
