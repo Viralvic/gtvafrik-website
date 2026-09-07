@@ -7,7 +7,7 @@
     <div class="site-footer__meta">
       <span>&copy; <?php echo esc_html(date('Y')); ?> GTVAFRIK</span>
       <a href="<?php echo esc_url(gtvafrik_posts_page_url()); ?>">Newsroom</a>
-      <a href="<?php echo esc_url(home_url('/#contact')); ?>">Contact</a>
+      <a href="<?php echo esc_url(home_url('/#contact')); ?>">Contact</a><span class="site-footer__legal-links"><a href="<?php echo esc_url(home_url('/disclaimer/')); ?>">Disclaimer</a><a href="<?php echo esc_url(home_url('/cookies-policy/')); ?>">Cookies</a><a href="<?php echo esc_url(home_url('/privacy-policy/')); ?>">Privacy</a><a href="<?php echo esc_url(home_url('/terms-of-use/')); ?>">Terms</a></span>
     </div>
   </div>
 </footer>
