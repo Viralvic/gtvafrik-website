@@ -59,18 +59,26 @@ $legal_pages = [
 ];
 
 if ('book-a-call' === $slug) : ?>
-  <main id="main" class="action-page">
+  <main id="main" class="action-page action-page--booking">
     <div class="shell action-page__grid">
-      <div class="action-page__copy"><p class="eyebrow">/ Booking desk</p><h1>Let’s make the<br><span class="accent">next move.</span></h1><p>Tell us what you’re building, where you need momentum and when you would like to talk. Our team will respond to arrange a suitable time.</p><ul class="action-page__details"><li><strong>Email</strong><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></li><li><strong>Phone</strong><a href="tel:+2348188059300">+234 818 805 9300</a></li></ul></div>
+      <div class="action-page__copy"><p class="eyebrow">/ Booking desk</p><h1>Let’s make the<br><span class="accent">next move.</span></h1><p>Tell us what you’re building, where you need momentum and when you would like to talk. Our team will respond to arrange a suitable time.</p></div>
       <?php gtvafrik_contact_form('Book a Call'); ?>
     </div>
   </main>
 <?php elseif ('contact-us' === $slug) : ?>
-  <main id="main" class="action-page">
-    <div class="shell action-page__grid">
-      <div class="action-page__copy"><p class="eyebrow">/ Contact us</p><h1>Start a<br><span class="accent">conversation.</span></h1><p>For campaigns, production, partnerships, newsroom enquiries or general questions, reach us directly or send the form.</p><ul class="action-page__details"><li><strong>Email</strong><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></li><li><strong>Call / WhatsApp</strong><a href="tel:+2348188059300">+234 818 805 9300</a></li><li><strong>Office</strong><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address></li></ul><a class="button button--ghost button--pill" href="https://wa.me/2348188059300" target="_blank" rel="noopener">Open WhatsApp <span aria-hidden="true">↗</span></a></div>
-      <?php gtvafrik_simple_contact_form(); ?>
+  <main id="main" class="action-page contact-offices">
+    <div class="shell"><div class="contact-offices__heading"><p class="eyebrow">/ Contact us</p><h1>Across Africa.<br><span class="accent">Within reach.</span></h1><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></div>
+      <div class="office-grid">
+        <article class="office-card"><span>01 / West Africa</span><h2>Abuja, Nigeria 🇳🇬</h2><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address><a href="tel:+2348188059300">+234 818 805 9300</a></article>
+        <article class="office-card"><span>02 / Southern Africa</span><h2>Johannesburg, South Africa 🇿🇦</h2><address>The Business Centre,<br>Corner William Nicol &amp; Leslie Avenue,<br>Fourways, Johannesburg, South Africa</address><a href="tel:+27724224142">+27 72 422 4142</a></article>
+        <article class="office-card"><span>03 / North Africa</span><h2>Cairo, Egypt 🇪🇬</h2><address>21C Street 198, Maadi Sarayat Al Gharbeyah,<br>Maadi, Cairo Governorate 4213002,<br>Egypt</address><a href="tel:+201117681867">+20 111 768 1867</a></article>
+      </div>
     </div>
+  </main>
+<?php elseif ('past-work' === $slug) : ?>
+  <main id="main" class="past-work-page">
+    <header class="shell past-work-hero"><p class="eyebrow">/ Our work</p><h1>Past work.<br><span class="accent">Still moving.</span></h1><p>Films, campaigns and original productions from across the continent.</p></header>
+    <section class="section shell"><div class="proof-grid proof-grid--archive"><?php $work = new WP_Query(['post_type'=>'gtv_work','posts_per_page'=>-1,'post_status'=>'publish','orderby'=>['menu_order'=>'ASC','date'=>'DESC']]); if ($work->have_posts()) : $i=1; while ($work->have_posts()) : $work->the_post(); gtvafrik_render_work_card(get_the_ID(),$i++); endwhile; wp_reset_postdata(); else : ?><p class="empty-state">Past Work entries added in the dashboard will appear here.</p><?php endif; ?></div></section>
   </main>
 <?php elseif (isset($legal_pages[$slug])) :
   $page = $legal_pages[$slug]; ?>
