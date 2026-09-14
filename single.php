@@ -35,6 +35,8 @@
       </aside>
     </div>
 
+    <?php if (comments_open() || get_comments_number()) : ?><section class="comments-shell shell"><?php comments_template(); ?></section><?php endif; ?>
+
     <section class="related shell">
       <div class="section-heading"><div><p class="eyebrow">/ Keep reading</p><h2>You might also like</h2></div></div>
       <div class="post-grid post-grid--related">
