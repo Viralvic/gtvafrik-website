@@ -122,6 +122,7 @@ function gtvafrik_ensure_legal_pages() {
         'terms-of-use'   => 'Terms of Use',
         'book-a-call'   => 'Book a Call',
         'contact-us'    => 'Contact Us',
+        'past-work'     => 'Past Work',
     ];
     foreach ($pages as $slug => $title) {
         if (!get_page_by_path($slug, OBJECT, 'page')) {
@@ -165,4 +166,93 @@ function gtvafrik_simple_contact_form() { ?>
       <label>Address<input name="address" required autocomplete="street-address" placeholder="Your city and address"></label>
       <button class="button button--pill" type="submit">Contact us <span aria-hidden="true">↗</span></button>
     </form>
+<?php }
+
+
+/**
+ * Editable Past Work and Team content managed from the WordPress dashboard.
+ */
+function gtvafrik_register_showcase_types() {
+    register_post_type('gtv_work', [
+        'labels' => ['name'=>'Past Work','singular_name'=>'Work Item','add_new_item'=>'Add Work Item','edit_item'=>'Edit Work Item'],
+        'public'=>true,'show_in_rest'=>true,'menu_icon'=>'dashicons-format-video',
+        'supports'=>['title','editor','thumbnail','page-attributes'],
+        'rewrite'=>['slug'=>'work'],
+    ]);
+    register_post_type('gtv_team', [
+        'labels' => ['name'=>'Team Members','singular_name'=>'Team Member','add_new_item'=>'Add Team Member','edit_item'=>'Edit Team Member'],
+        'public'=>false,'show_ui'=>true,'show_in_rest'=>true,'menu_icon'=>'dashicons-groups',
+        'supports'=>['title','editor','thumbnail','page-attributes'],
+    ]);
+}
+add_action('init','gtvafrik_register_showcase_types');
+
+function gtvafrik_showcase_meta_boxes() {
+    add_meta_box('gtvafrik_work_media','Work video and link','gtvafrik_work_meta_box','gtv_work','normal','high');
+    add_meta_box('gtvafrik_team_details','Team member details','gtvafrik_team_meta_box','gtv_team','normal','high');
+}
+add_action('add_meta_boxes','gtvafrik_showcase_meta_boxes');
+
+function gtvafrik_work_meta_box($post) {
+    wp_nonce_field('gtvafrik_showcase_meta','gtvafrik_showcase_nonce');
+    $video = get_post_meta($post->ID,'_gtv_work_video',true);
+    $redirect = get_post_meta($post->ID,'_gtv_work_redirect',true); ?>
+    <p><label for="gtv_work_video"><strong>Video URL</strong></label><br><input class="widefat" id="gtv_work_video" name="gtv_work_video" type="url" value="<?php echo esc_attr($video); ?>" placeholder="YouTube URL or Media Library video URL"></p>
+    <p><button class="button" id="gtv-select-video" type="button">Select video from Media Library</button></p>
+    <p><label for="gtv_work_redirect"><strong>Optional redirect URL</strong></label><br><input class="widefat" id="gtv_work_redirect" name="gtv_work_redirect" type="url" value="<?php echo esc_attr($redirect); ?>" placeholder="https://…"></p>
+    <p>Use the Featured Image panel for the thumbnail. The main editor is available for a description.</p>
+<?php }
+
+function gtvafrik_team_meta_box($post) {
+    wp_nonce_field('gtvafrik_showcase_meta','gtvafrik_showcase_nonce');
+    $designation=get_post_meta($post->ID,'_gtv_team_designation',true);
+    $location=get_post_meta($post->ID,'_gtv_team_location',true); ?>
+    <p><label><strong>Designation</strong><br><input class="widefat" name="gtv_team_designation" value="<?php echo esc_attr($designation); ?>"></label></p>
+    <p><label><strong>Location</strong><br><input class="widefat" name="gtv_team_location" value="<?php echo esc_attr($location); ?>"></label></p>
+    <p>Use the Featured Image panel for the portrait and the main editor for the short bio.</p>
+<?php }
+
+function gtvafrik_save_showcase_meta($post_id) {
+    if (!isset($_POST['gtvafrik_showcase_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['gtvafrik_showcase_nonce'])),'gtvafrik_showcase_meta') || (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) || !current_user_can('edit_post',$post_id)) return;
+    if ('gtv_work'===get_post_type($post_id)) {
+        update_post_meta($post_id,'_gtv_work_video',esc_url_raw(wp_unslash($_POST['gtv_work_video'] ?? '')));
+        update_post_meta($post_id,'_gtv_work_redirect',esc_url_raw(wp_unslash($_POST['gtv_work_redirect'] ?? '')));
+    }
+    if ('gtv_team'===get_post_type($post_id)) {
+        update_post_meta($post_id,'_gtv_team_designation',sanitize_text_field(wp_unslash($_POST['gtv_team_designation'] ?? '')));
+        update_post_meta($post_id,'_gtv_team_location',sanitize_text_field(wp_unslash($_POST['gtv_team_location'] ?? '')));
+    }
+}
+add_action('save_post','gtvafrik_save_showcase_meta');
+
+function gtvafrik_showcase_admin_assets($hook) {
+    global $post;
+    if (!in_array($hook,['post.php','post-new.php'],true) || !$post || 'gtv_work'!==$post->post_type) return;
+    wp_enqueue_media();
+    wp_add_inline_script('media-editor', "document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('gtv-select-video'),i=document.getElementById('gtv_work_video');if(!b||!i)return;b.addEventListener('click',function(e){e.preventDefault();var f=wp.media({title:'Select a work video',library:{type:'video'},button:{text:'Use this video'},multiple:false});f.on('select',function(){i.value=f.state().get('selection').first().toJSON().url;});f.open();});});");
+}
+add_action('admin_enqueue_scripts','gtvafrik_showcase_admin_assets');
+
+function gtvafrik_youtube_id($url) {
+    if (preg_match('~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?v=|embed/|shorts/))([A-Za-z0-9_-]{6,})~',$url,$match)) return $match[1];
+    return '';
+}
+
+function gtvafrik_render_work_card($post_id,$index=1) {
+    $video=get_post_meta($post_id,'_gtv_work_video',true);
+    $redirect=get_post_meta($post_id,'_gtv_work_redirect',true);
+    $youtube=gtvafrik_youtube_id($video);
+    $type=$youtube?'youtube':'video';
+    $source=$youtube?'https://www.youtube-nocookie.com/embed/'.$youtube.'?autoplay=1':$video;
+    $thumb=get_the_post_thumbnail_url($post_id,'large');
+    if (!$thumb && $youtube) $thumb='https://i.ytimg.com/vi/'.$youtube.'/hqdefault.jpg';
+    $title=get_the_title($post_id);
+    $summary=wp_trim_words(wp_strip_all_tags(get_post_field('post_content',$post_id)),10,'…');
+    $classes=['coral','cyan','yellow'];
+    $class=$classes[($index-1)%count($classes)]; ?>
+    <article class="proof-card proof-card--<?php echo esc_attr($class); ?>" data-proof-type="<?php echo esc_attr($type); ?>" data-proof-src="<?php echo esc_url($source); ?>" data-proof-title="<?php echo esc_attr($title); ?>" data-proof-redirect="<?php echo esc_url($redirect); ?>">
+      <?php if ($thumb) : ?><span class="proof-card__preview" aria-hidden="true"><img src="<?php echo esc_url($thumb); ?>" alt=""></span><?php elseif ($video && !$youtube) : ?><span class="proof-card__preview" aria-hidden="true"><video muted loop playsinline preload="metadata" src="<?php echo esc_url($video); ?>"></video></span><?php endif; ?>
+      <span class="proof-card__shade" aria-hidden="true"></span><span class="proof-card__case">Case / <?php echo esc_html(str_pad((string)$index,2,'0',STR_PAD_LEFT)); ?></span><span class="proof-card__shape" aria-hidden="true"></span><span class="proof-card__meta"><?php echo esc_html($summary ?: 'GTVAFRIK production'); ?></span><strong><?php echo esc_html($title); ?></strong>
+      <span class="proof-card__actions"><?php if ($video) : ?><button type="button" class="proof-card__watch">Watch the work <b aria-hidden="true">▶</b></button><?php endif; ?><?php if ($redirect) : ?><a href="<?php echo esc_url($redirect); ?>">View project <b aria-hidden="true">↗</b></a><?php endif; ?></span>
+    </article>
 <?php }
