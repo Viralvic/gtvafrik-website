@@ -1,16 +1,4 @@
-<footer class="site-footer">
-  <div class="shell site-footer__inner">
-    <div>
-      <p class="site-footer__brand">GT<span>V</span>AFRIK</p>
-      <p class="site-footer__tagline">Africa's story. Uncut, unstoppable.</p>
-    </div>
-    <div class="site-footer__meta">
-      <span>&copy; <?php echo esc_html(date('Y')); ?> GTVAFRIK</span>
-      <a href="<?php echo esc_url(gtvafrik_posts_page_url()); ?>">Newsroom</a>
-      <a href="<?php echo esc_url(home_url('/past-work/')); ?>">Past Work</a><a href="<?php echo esc_url(home_url('/contact-us/')); ?>">Contact</a><a href="<?php echo esc_url(home_url('/book-a-call/')); ?>">Book a Call</a><span class="site-footer__legal-links"><a href="<?php echo esc_url(home_url('/disclaimer/')); ?>">Disclaimer</a><a href="<?php echo esc_url(home_url('/cookies-policy/')); ?>">Cookies</a><a href="<?php echo esc_url(home_url('/privacy-policy/')); ?>">Privacy</a><a href="<?php echo esc_url(home_url('/terms-of-use/')); ?>">Terms</a></span>
-    </div>
-  </div>
-</footer>
+<?php get_template_part('template-parts/home-footer'); ?>
 <?php wp_footer(); ?>
 </body>
 </html>
