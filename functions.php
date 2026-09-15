@@ -240,6 +240,7 @@ function gtvafrik_youtube_id($url) {
 
 function gtvafrik_render_work_card($post_id,$index=1) {
     $video=get_post_meta($post_id,'_gtv_work_video',true);
+    if (!$video) { $media_filename=get_post_meta($post_id,'_gtv_work_media_filename',true); if ($media_filename) $video=gtvafrik_media_url($media_filename); }
     $redirect=get_post_meta($post_id,'_gtv_work_redirect',true);
     $youtube=gtvafrik_youtube_id($video);
     $type=$youtube?'youtube':'video';
@@ -256,3 +257,80 @@ function gtvafrik_render_work_card($post_id,$index=1) {
       <span class="proof-card__actions"><?php if ($video) : ?><button type="button" class="proof-card__watch">Watch the work <b aria-hidden="true">▶</b></button><?php endif; ?><?php if ($redirect) : ?><a href="<?php echo esc_url($redirect); ?>">View project <b aria-hidden="true">↗</b></a><?php endif; ?></span>
     </article>
 <?php }
+
+
+/** GTVAFRIK showcase defaults and streamlined editorial admin. */
+function gtvafrik_seed_default_work() {
+    if (get_option('gtvafrik_default_work_seeded_v1')) return;
+    $items = [
+        ['Citizen Autopsy','DOCUMENTARY · PUBLIC INTEREST','https://www.youtube.com/watch?v=dK0AzE0KYjI','',1],
+        ["Men's Table",'ORIGINAL PROGRAMMING · CULTURE','','Mens-Table.mp4',2],
+        ['The Rock Restaurant Zanzibar','TRAVEL · HOSPITALITY','','The-Rock-Zanzibar.mp4',3],
+    ];
+    foreach ($items as $item) {
+        $existing = new WP_Query(['post_type'=>'gtv_work','post_status'=>'any','title'=>$item[0],'fields'=>'ids','posts_per_page'=>1,'no_found_rows'=>true]);
+        if ($existing->have_posts()) continue;
+        $post_id = wp_insert_post(['post_type'=>'gtv_work','post_status'=>'publish','post_title'=>$item[0],'post_content'=>$item[1],'menu_order'=>$item[4]]);
+        if (!is_wp_error($post_id)) {
+            if ($item[2]) update_post_meta($post_id,'_gtv_work_video',$item[2]);
+            if ($item[3]) update_post_meta($post_id,'_gtv_work_media_filename',$item[3]);
+        }
+    }
+    update_option('gtvafrik_default_work_seeded_v1',1,false);
+}
+add_action('init','gtvafrik_seed_default_work',30);
+
+function gtvafrik_remove_comment_url_field($fields) { unset($fields['url']); return $fields; }
+add_filter('comment_form_default_fields','gtvafrik_remove_comment_url_field');
+
+function gtvafrik_work_admin_columns($columns) {
+    return ['cb'=>$columns['cb'],'gtv_thumb'=>'Preview','title'=>'Work title','gtv_source'=>'Video source','date'=>'Published'];
+}
+add_filter('manage_gtv_work_posts_columns','gtvafrik_work_admin_columns');
+function gtvafrik_team_admin_columns($columns) {
+    return ['cb'=>$columns['cb'],'gtv_thumb'=>'Portrait','title'=>'Team member','gtv_role'=>'Designation','gtv_location'=>'Location','date'=>'Published'];
+}
+add_filter('manage_gtv_team_posts_columns','gtvafrik_team_admin_columns');
+
+function gtvafrik_showcase_admin_column($column,$post_id) {
+    if ('gtv_thumb' === $column) {
+        if (has_post_thumbnail($post_id)) echo get_the_post_thumbnail($post_id,[72,72]);
+        else echo '<span class="gtv-admin-placeholder">No image</span>';
+    }
+    if ('gtv_source' === $column) {
+        $video=get_post_meta($post_id,'_gtv_work_video',true);
+        $filename=get_post_meta($post_id,'_gtv_work_media_filename',true);
+        echo '<span class="gtv-admin-pill">'.esc_html(gtvafrik_youtube_id($video)?'YouTube':($video||$filename?'Media Library':'Not set')).'</span>';
+    }
+    if ('gtv_role' === $column) echo esc_html(get_post_meta($post_id,'_gtv_team_designation',true) ?: '—');
+    if ('gtv_location' === $column) echo esc_html(get_post_meta($post_id,'_gtv_team_location',true) ?: '—');
+}
+add_action('manage_gtv_work_posts_custom_column','gtvafrik_showcase_admin_column',10,2);
+add_action('manage_gtv_team_posts_custom_column','gtvafrik_showcase_admin_column',10,2);
+
+function gtvafrik_showcase_admin_notice() {
+    $screen=get_current_screen();
+    if (!$screen || !in_array($screen->post_type,['gtv_work','gtv_team'],true) || 'edit' !== $screen->base) return;
+    $is_work='gtv_work'===$screen->post_type;
+    echo '<div class="notice gtvafrik-admin-intro"><h2>'.esc_html($is_work?'Manage Past Work':'Manage the GTVAFRIK Team').'</h2><p>'.esc_html($is_work?'Add a title, description, thumbnail and either a YouTube or Media Library video. Published items appear on the homepage and Past Work page automatically.':'Add a portrait, name, designation, location and short bio. Published profiles appear in the homepage carousel automatically.').'</p></div>';
+}
+add_action('admin_notices','gtvafrik_showcase_admin_notice');
+
+function gtvafrik_showcase_admin_styles() {
+    $screen=get_current_screen();
+    if (!$screen || !in_array($screen->post_type,['gtv_work','gtv_team'],true)) return; ?>
+    <style>
+      body.post-type-gtv_work,body.post-type-gtv_team{--gtv-navy:#071936;--gtv-blue:#38b6ff}
+      .gtvafrik-admin-intro{border-left:5px solid var(--gtv-blue);padding:18px 22px;background:linear-gradient(105deg,#071936,#103a60);color:#fff}
+      .gtvafrik-admin-intro h2{margin:0 0 6px;color:#fff;font-size:22px}.gtvafrik-admin-intro p{margin:0;color:#c4d4e7}
+      body.post-type-gtv_work .wp-heading-inline,body.post-type-gtv_team .wp-heading-inline{font-weight:700}
+      body.post-type-gtv_work .page-title-action,body.post-type-gtv_team .page-title-action{background:var(--gtv-blue)!important;border-color:var(--gtv-blue)!important;color:#071936!important;border-radius:999px;padding:7px 16px}
+      body.post-type-gtv_work .wp-list-table,body.post-type-gtv_team .wp-list-table{border-radius:10px;overflow:hidden;box-shadow:0 8px 28px rgba(7,25,54,.08)}
+      .column-gtv_thumb{width:92px}.column-gtv_thumb img{width:64px;height:64px;object-fit:cover;border-radius:8px}.gtv-admin-placeholder{display:grid;place-items:center;width:64px;height:64px;border:1px dashed #9fb2c5;border-radius:8px;color:#66778a;font-size:11px}
+      .gtv-admin-pill{display:inline-block;padding:5px 10px;border-radius:999px;background:#dff4ff;color:#07517b;font-weight:600}
+      #gtvafrik_work_media,#gtvafrik_team_details{border:0;border-radius:10px;box-shadow:0 8px 28px rgba(7,25,54,.1);overflow:hidden}
+      #gtvafrik_work_media .postbox-header,#gtvafrik_team_details .postbox-header{background:#071936;color:#fff}#gtvafrik_work_media .hndle,#gtvafrik_team_details .hndle{color:#fff}
+      #gtvafrik_work_media .inside,#gtvafrik_team_details .inside{padding:18px 22px}#gtvafrik_work_media input,#gtvafrik_team_details input{padding:10px 12px;border-radius:7px}
+    </style>
+<?php }
+add_action('admin_head','gtvafrik_showcase_admin_styles');
