@@ -176,13 +176,13 @@ function gtvafrik_register_showcase_types() {
     register_post_type('gtv_work', [
         'labels' => ['name'=>'Past Work','singular_name'=>'Work Item','add_new_item'=>'Add Work Item','edit_item'=>'Edit Work Item'],
         'public'=>true,'show_in_rest'=>true,'menu_icon'=>'dashicons-format-video',
-        'supports'=>['title','editor','thumbnail','page-attributes'],
+        'supports'=>['title','thumbnail','page-attributes'],
         'rewrite'=>['slug'=>'work'],
     ]);
     register_post_type('gtv_team', [
         'labels' => ['name'=>'Team Members','singular_name'=>'Team Member','add_new_item'=>'Add Team Member','edit_item'=>'Edit Team Member'],
         'public'=>false,'show_ui'=>true,'show_in_rest'=>true,'menu_icon'=>'dashicons-groups',
-        'supports'=>['title','editor','thumbnail','page-attributes'],
+        'supports'=>['title','thumbnail','page-attributes'],
     ]);
 }
 add_action('init','gtvafrik_register_showcase_types');
@@ -196,20 +196,22 @@ add_action('add_meta_boxes','gtvafrik_showcase_meta_boxes');
 function gtvafrik_work_meta_box($post) {
     wp_nonce_field('gtvafrik_showcase_meta','gtvafrik_showcase_nonce');
     $video = get_post_meta($post->ID,'_gtv_work_video',true);
-    $redirect = get_post_meta($post->ID,'_gtv_work_redirect',true); ?>
+    $redirect = get_post_meta($post->ID,'_gtv_work_redirect',true);
+    $description = get_post_field('post_content',$post->ID); ?>
     <p><label for="gtv_work_video"><strong>Video URL</strong></label><br><input class="widefat" id="gtv_work_video" name="gtv_work_video" type="url" value="<?php echo esc_attr($video); ?>" placeholder="YouTube URL or Media Library video URL"></p>
     <p><button class="button" id="gtv-select-video" type="button">Select video from Media Library</button></p>
     <p><label for="gtv_work_redirect"><strong>Optional redirect URL</strong></label><br><input class="widefat" id="gtv_work_redirect" name="gtv_work_redirect" type="url" value="<?php echo esc_attr($redirect); ?>" placeholder="https://…"></p>
-    <p>Use the Featured Image panel for the thumbnail. The main editor is available for a description.</p>
+    <p><label for="gtv_work_description"><strong>Project summary</strong></label><br><textarea class="widefat" rows="5" id="gtv_work_description" name="gtv_work_description" placeholder="Short description shown on the work card"><?php echo esc_textarea($description); ?></textarea></p><p>Use the Featured Image panel for the thumbnail.</p>
 <?php }
 
 function gtvafrik_team_meta_box($post) {
     wp_nonce_field('gtvafrik_showcase_meta','gtvafrik_showcase_nonce');
     $designation=get_post_meta($post->ID,'_gtv_team_designation',true);
-    $location=get_post_meta($post->ID,'_gtv_team_location',true); ?>
+    $location=get_post_meta($post->ID,'_gtv_team_location',true);
+    $bio=get_post_field('post_content',$post->ID); ?>
     <p><label><strong>Designation</strong><br><input class="widefat" name="gtv_team_designation" value="<?php echo esc_attr($designation); ?>"></label></p>
     <p><label><strong>Location</strong><br><input class="widefat" name="gtv_team_location" value="<?php echo esc_attr($location); ?>"></label></p>
-    <p>Use the Featured Image panel for the portrait and the main editor for the short bio.</p>
+    <p><label><strong>Short bio</strong><br><textarea class="widefat" rows="6" name="gtv_team_bio" placeholder="A concise professional biography"><?php echo esc_textarea($bio); ?></textarea></label></p><p>Use the Featured Image panel for the portrait.</p>
 <?php }
 
 function gtvafrik_save_showcase_meta($post_id) {
@@ -217,10 +219,12 @@ function gtvafrik_save_showcase_meta($post_id) {
     if ('gtv_work'===get_post_type($post_id)) {
         update_post_meta($post_id,'_gtv_work_video',esc_url_raw(wp_unslash($_POST['gtv_work_video'] ?? '')));
         update_post_meta($post_id,'_gtv_work_redirect',esc_url_raw(wp_unslash($_POST['gtv_work_redirect'] ?? '')));
+        gtvafrik_update_showcase_content($post_id,wp_kses_post(wp_unslash($_POST['gtv_work_description'] ?? '')));
     }
     if ('gtv_team'===get_post_type($post_id)) {
         update_post_meta($post_id,'_gtv_team_designation',sanitize_text_field(wp_unslash($_POST['gtv_team_designation'] ?? '')));
         update_post_meta($post_id,'_gtv_team_location',sanitize_text_field(wp_unslash($_POST['gtv_team_location'] ?? '')));
+        gtvafrik_update_showcase_content($post_id,wp_kses_post(wp_unslash($_POST['gtv_team_bio'] ?? '')));
     }
 }
 add_action('save_post','gtvafrik_save_showcase_meta');
@@ -334,3 +338,17 @@ function gtvafrik_showcase_admin_styles() {
     </style>
 <?php }
 add_action('admin_head','gtvafrik_showcase_admin_styles');
+
+
+function gtvafrik_showcase_uses_custom_editor($use_block_editor,$post_type) {
+    if (in_array($post_type,['gtv_work','gtv_team'],true)) return false;
+    return $use_block_editor;
+}
+add_filter('use_block_editor_for_post_type','gtvafrik_showcase_uses_custom_editor',10,2);
+
+function gtvafrik_update_showcase_content($post_id,$content) {
+    if (get_post_field('post_content',$post_id) === $content) return;
+    remove_action('save_post','gtvafrik_save_showcase_meta');
+    wp_update_post(['ID'=>$post_id,'post_content'=>$content]);
+    add_action('save_post','gtvafrik_save_showcase_meta');
+}
