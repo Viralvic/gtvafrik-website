@@ -67,12 +67,13 @@ if ('book-a-call' === $slug) : ?>
   </main>
 <?php elseif ('contact-us' === $slug) : ?>
   <main id="main" class="action-page contact-offices">
-    <div class="shell"><div class="contact-offices__heading"><p class="eyebrow">/ Contact us</p><h1>Across Africa.<br><span class="accent">Within reach.</span></h1><a href="mailto:info@gtvafrik.com">info@gtvafrik.com</a></div>
+    <div class="shell"><div class="contact-offices__heading"><p class="eyebrow">/ Contact us</p><h1>Across Africa.<br><span class="accent">Within reach.</span></h1></div>
       <div class="office-grid">
-        <article class="office-card"><span>01 / West Africa</span><h2>Abuja, Nigeria 🇳🇬</h2><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address><a href="tel:+2348188059300">+234 818 805 9300</a></article>
-        <article class="office-card"><span>02 / Southern Africa</span><h2>Johannesburg, South Africa 🇿🇦</h2><address>The Business Centre,<br>Corner William Nicol &amp; Leslie Avenue,<br>Fourways, Johannesburg, South Africa</address><a href="tel:+27724224142">+27 72 422 4142</a></article>
-        <article class="office-card"><span>03 / North Africa</span><h2>Cairo, Egypt 🇪🇬</h2><address>21C Street 198, Maadi Sarayat Al Gharbeyah,<br>Maadi, Cairo Governorate 4213002,<br>Egypt</address><a href="tel:+201117681867">+20 111 768 1867</a></article>
+        <article class="office-card"><span>01 / West Africa</span><h2>Abuja, Nigeria 🇳🇬</h2><address>Suite 38 (3rd Floor), Birgi Plaza,<br>697 Idris Gidado Street, Wuye District,<br>Abuja, Nigeria</address><a class="office-card__email" href="mailto:info@gtvafrik.com">info@gtvafrik.com</a><a href="tel:+2348188059300">+234 818 805 9300</a></article>
+        <article class="office-card"><span>02 / South Africa</span><h2>Johannesburg, South Africa 🇿🇦</h2><address>The Business Centre,<br>Corner William Nicol &amp; Leslie Avenue,<br>Fourways, Johannesburg, South Africa</address><a class="office-card__email" href="mailto:info@gtvafrik.com">info@gtvafrik.com</a><a href="tel:+27724224142">+27 72 422 4142</a></article>
+        <article class="office-card"><span>03 / North Africa</span><h2>Cairo, Egypt 🇪🇬</h2><address>21C Street 198, Maadi Sarayat Al Gharbeyah,<br>Maadi, Cairo Governorate 4213002,<br>Egypt</address><a class="office-card__email" href="mailto:info@gtvafrik.com">info@gtvafrik.com</a><a href="tel:+201117681867">+20 111 768 1867</a></article>
       </div>
+      <section class="contact-form-section"><div><p class="eyebrow">/ Send a message</p><h2>Start a conversation.</h2><p>Use the form and our team will get back to you.</p></div><?php gtvafrik_simple_contact_form(); ?></section>
     </div>
   </main>
 <?php elseif ('past-work' === $slug) : ?>
