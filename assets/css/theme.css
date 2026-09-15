@@ -402,3 +402,12 @@ body:not(.home) .home-footer{margin-top:0}
   .contact-form-section{padding:30px 22px;gap:28px;margin-top:44px}
   .trust__art{max-width:300px}.team-card--empty .team-card__body{padding:30px 24px}
 }
+
+
+/* Compact team cards — v0.14 */
+.team-carousel__track{grid-auto-columns:calc((100% - 72px)/3.35);gap:24px}
+.team-card figure{aspect-ratio:4/4;max-height:430px}
+.team-card__body{padding:19px 20px 22px}
+.team-card h3{font-size:1.45rem}.team-card__bio{font-size:.84rem}
+@media(max-width:1023px){.team-carousel__track{grid-auto-columns:calc((100% - 24px)/2.2)}}
+@media(max-width:640px){.team-carousel__track{grid-auto-columns:82%;gap:16px}.team-card figure{max-height:360px}}
